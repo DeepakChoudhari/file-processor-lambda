@@ -25,7 +25,7 @@ AWS Lambda function that reads data (.csv file) from a configured S3 bucket and 
     cdk deploy
     ```
 
-4. Once the above command is successful, copy the test `.csv` file to the bucket by running below command. The `testdata.csv` is located at `file-processor-app/src/test/testdata.csv`
+4. Once the above command is successful, copy the test `.csv` file to the bucket by running below command. The `testdata.csv` is located at `file-processor-app/test/testdata.csv`
     ```cmd
     aws s3 cp testdata.csv s3://csv-input-data-bucket/testdata.csv
     ```
