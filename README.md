@@ -9,7 +9,7 @@ AWS Lambda function that reads data (.csv file) from a configured S3 bucket and 
 4. sam cli (Optional)
 5. Docker Desktop
 
-### Setup instructions
+### Setup and deploy
 1. Install dependencies from root directory from the location of `package.json`
     ```cmd
     npm i
@@ -30,4 +30,9 @@ AWS Lambda function that reads data (.csv file) from a configured S3 bucket and 
     aws s3 cp testdata.csv s3://csv-input-data-bucket/testdata.csv
     ```
 
-5. 
+5. Login to AWS console, goto lambda cloudwatch log group (`/aws/lambda/csv-file-processor`) to see the logs generated from deployed lambda function.
+
+6. Check dynamodb table to see the records from csv file populated
+    ```cmd
+    aws dynamodb scan --table-name customers
+    ```

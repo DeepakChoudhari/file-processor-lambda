@@ -6,6 +6,7 @@ import { BlockPublicAccess, Bucket } from 'aws-cdk-lib/aws-s3';
 import { Construct } from 'constructs';
 import * as path from 'node:path';
 import { RetentionDays } from 'aws-cdk-lib/aws-logs';
+import { AttributeType, Table } from 'aws-cdk-lib/aws-dynamodb';
 
 export class FileProcessorInfraStack extends cdk.Stack {
   constructor(scope: Construct, id: string, props?: cdk.StackProps) {
@@ -30,5 +31,19 @@ export class FileProcessorInfraStack extends cdk.Stack {
     bucket.addObjectCreatedNotification(new LambdaDestination(lambda), {
       suffix: '.csv',
     });
+
+    const dynamodb = new Table(this, 'customersTable', {
+      tableName: 'customers_info',
+      partitionKey: {
+        name: 'id',
+        type: AttributeType.STRING
+      },
+      sortKey: {
+        name: 'firstName',
+        type: AttributeType.STRING
+      },
+      removalPolicy: cdk.RemovalPolicy.DESTROY
+    });
+    dynamodb.grantReadWriteData(lambda);
   }
 }
