@@ -32,7 +32,12 @@ AWS Lambda function that reads data (.csv file) from a configured S3 bucket and 
 
 5. Login to AWS console, goto lambda cloudwatch log group (`/aws/lambda/csv-file-processor`) to see the logs generated from deployed lambda function.
 
-6. Check dynamodb table to see the records from csv file populated
+6. Validate dynamodb table to see the records from csv file were persisted
     ```cmd
     aws dynamodb scan --table-name customers
+    ```
+
+7. Tear down the application
+    ```cmd
+    cdk destroy
     ```

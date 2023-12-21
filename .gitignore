@@ -137,3 +137,5 @@ node_modules
 # CDK asset staging directory
 .cdk.staging
 cdk.out
+
+.vscode/

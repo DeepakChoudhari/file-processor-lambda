@@ -12,12 +12,28 @@ export class FileProcessorInfraStack extends cdk.Stack {
   constructor(scope: Construct, id: string, props?: cdk.StackProps) {
     super(scope, id, props);
 
+    const dynamodb = new Table(this, 'customersTable', {
+      tableName: 'customers_info',
+      partitionKey: {
+        name: 'id',
+        type: AttributeType.STRING
+      },
+      sortKey: {
+        name: 'firstName',
+        type: AttributeType.STRING
+      },
+      removalPolicy: cdk.RemovalPolicy.DESTROY
+    });
+
     const lambda = new NodejsFunction(this, 'file-processor-function', {
       runtime: Runtime.NODEJS_18_X,
       entry: path.resolve(__dirname, '../../file-processor-app/src/index.ts'),
       handler: 'handlerFunc',
       functionName: 'csv-file-processor',
       logRetention: RetentionDays.ONE_DAY,
+      environment: {
+        'TABLE_NAME': dynamodb.tableName
+      }
     });
 
     const bucket = new Bucket(this, 'csv-input-bucket', {
@@ -32,18 +48,6 @@ export class FileProcessorInfraStack extends cdk.Stack {
       suffix: '.csv',
     });
 
-    const dynamodb = new Table(this, 'customersTable', {
-      tableName: 'customers_info',
-      partitionKey: {
-        name: 'id',
-        type: AttributeType.STRING
-      },
-      sortKey: {
-        name: 'firstName',
-        type: AttributeType.STRING
-      },
-      removalPolicy: cdk.RemovalPolicy.DESTROY
-    });
     dynamodb.grantReadWriteData(lambda);
   }
 }
